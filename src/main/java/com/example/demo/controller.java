@@ -27,7 +27,7 @@ public class HomeController {
 	@GetMapping("/greeting")
 		public String greetingForm(Model model) {
 			Count count = new Count();
-			Count.count = Count.count + 1;
+			count.count = count.count + 1;
 			model.addAttribute("greeting", new Greeting());
 			model.addAttribute("count", count);
 			
@@ -44,7 +44,7 @@ public class HomeController {
 	@GetMapping({"/get_question", "/get-question"})
 	public String questionForm(Model model) {
 		Count count = new Count();
-		Count.count = Count.count + 1;
+		count.count = count.count + 1;
 		MyString myString = new MyString();
 		GetQuestion getQuestion = new GetQuestion();
 		myString.setMyString(getQuestion.nextQuestion().getQuestion());
@@ -63,7 +63,7 @@ public class HomeController {
 		model.addAttribute("QuestionTrueFalse", qtf);
 
 		Count count = new Count();
-		Count.count = Count.count + 1;
+		count.count = count.count + 1;
 		model.addAttribute("count", count);
 		MyString myString = new MyString();
 		myString.setMyString(getQuestion.nextQuestion().getQuestion());
