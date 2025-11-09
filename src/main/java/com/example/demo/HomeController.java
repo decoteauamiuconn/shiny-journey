@@ -1,10 +1,17 @@
 package com.example.demo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller; 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.GetMapping; 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.model.Greeting;
 import com.example.demo.model.MyString;
@@ -41,46 +48,36 @@ public class HomeController {
 		return "result";
   	}
 
-	@GetMapping({"/get_question", "/get-question"})
-	public String questionForm(Model model) {
-		Count count = new Count();
-		count.count = count.count + 1;
-		MyString myString = new MyString();
-		GetQuestion getQuestion = new GetQuestion();
-		myString.setMyString(getQuestion.nextQuestion(0).getQuestion());
-		model.addAttribute("myString", myString );
-		model.addAttribute("count", count);
-		
-		return "question";
-	}
+    @GetMapping("/quiz")
+    public String showQuiz(Model model) {
+        AllQuestions allQuestions = new AllQuestions();
+        List<QuestionTrueFalse> questions = allQuestions.getAllQuestions();
+        model.addAttribute("questions", questions);
+        return "question";
+    }
 
-	@PostMapping({"/get_question", "/get-question"})
-	public String questionFormPOST(String answer, Model model) {
-		System.out.println("The answer is " + answer);
-		
-		GetQuestion getQuestion = new GetQuestion();
-		QuestionTrueFalse qtf = getQuestion.nextQuestion(0);
-		model.addAttribute("QuestionTrueFalse", qtf);
-
-		Count count = new Count();
-		count.count = count.count + 1;
-		model.addAttribute("count", count);
-		MyString myString = new MyString();
-		myString.setMyString(getQuestion.nextQuestion(0).getQuestion());
-		model.addAttribute("myString", myString );
-
-		// Compare Boolean values correctly (avoid reference equality)
-		Boolean answerBool = Boolean.valueOf(answer);
-		if (answerBool.equals(qtf.getAnswer())) {
-			System.out.println("Correct!");
-		} else {
-			System.out.println("Wrong!");
-		}
-		//model.addAttribute("myString", myString );
-		
-		
-		return "question";
-	}
+    @PostMapping("/submit-quiz")
+    @ResponseBody
+    public Map<String, Object> submitQuiz(@RequestBody Map<String, Boolean> answers) {
+        AllQuestions allQuestions = new AllQuestions();
+        List<QuestionTrueFalse> questions = allQuestions.getAllQuestions();
+        
+        List<Map<String, Object>> results = new ArrayList<>();
+        
+        for (int i = 0; i < questions.size(); i++) {
+            Boolean userAnswer = answers.get("answer" + i);
+            QuestionTrueFalse question = questions.get(i);
+            
+            Map<String, Object> result = new HashMap<>();
+            result.put("correct", userAnswer.equals(question.getAnswer()));
+            result.put("correctAnswer", question.getAnswer());
+            results.add(result);
+        }
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("results", results);
+        return response;
+    }
 
   
 }

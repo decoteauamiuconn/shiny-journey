@@ -1,6 +1,8 @@
 package com.example.demo.model.questions;
 
-public class QuestionTrueFalse {
+import java.util.List;
+
+public class QuestionTrueFalse implements List<QuestionTrueFalse> {
     private String question;
     private Boolean answer;
 

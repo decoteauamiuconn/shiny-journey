@@ -7,7 +7,7 @@ public class AllQuestions {
     private static List<QuestionTrueFalse> arrayListQuestionsTF = new ArrayList<QuestionTrueFalse>();
     private int totalQuestions = 0;
 
-    public void ArrayQuestionsTrueFalse() {
+    public AllQuestions() {
         arrayListQuestionsTF.add(new QuestionTrueFalse("99.9% of calico cats are female", true));
         arrayListQuestionsTF.add(new QuestionTrueFalse("The Andromeda Galaxy is the closest major galaxy to the Milky Way", true));
         arrayListQuestionsTF.add(new QuestionTrueFalse("Sewing machines were invented in 1655", false));
@@ -16,8 +16,8 @@ public class AllQuestions {
         totalQuestions = arrayListQuestionsTF.size();
     }
 
-    public QuestionTrueFalse nextQuestion(int i) {
-        return arrayListQuestionsTF.get(i % totalQuestions);
+    public List<QuestionTrueFalse> getAllQuestions() {
+        return new ArrayList<>(arrayListQuestionsTF);
     }
     
 }
