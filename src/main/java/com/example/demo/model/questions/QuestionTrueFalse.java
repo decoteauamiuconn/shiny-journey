@@ -2,7 +2,7 @@ package com.example.demo.model.questions;
 
 import java.util.List;
 
-public class QuestionTrueFalse implements List<QuestionTrueFalse> {
+public class QuestionTrueFalse {
     private String question;
     private Boolean answer;
 
