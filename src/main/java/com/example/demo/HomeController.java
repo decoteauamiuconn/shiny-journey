@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo;
 
 import org.springframework.stereotype.Controller; 
 import org.springframework.ui.Model;
@@ -10,7 +10,7 @@ import com.example.demo.model.Greeting;
 import com.example.demo.model.MyString;
 import com.example.demo.model.GetQuestion;
 import com.example.demo.model.Count;
-import com.example.demo.model.MyString;
+//import com.example.demo.model.MyString;
 //import com.example.demo.model.questions.QuestionTrueFalse;
 import com.example.demo.model.questions.*;
 
@@ -47,7 +47,7 @@ public class HomeController {
 		count.count = count.count + 1;
 		MyString myString = new MyString();
 		GetQuestion getQuestion = new GetQuestion();
-		myString.setMyString(getQuestion.nextQuestion().getQuestion());
+		myString.setMyString(getQuestion.nextQuestion(0).getQuestion());
 		model.addAttribute("myString", myString );
 		model.addAttribute("count", count);
 		
@@ -59,14 +59,14 @@ public class HomeController {
 		System.out.println("The answer is " + answer);
 		
 		GetQuestion getQuestion = new GetQuestion();
-		QuestionTrueFalse qtf = getQuestion.nextQuestion();
+		QuestionTrueFalse qtf = getQuestion.nextQuestion(0);
 		model.addAttribute("QuestionTrueFalse", qtf);
 
 		Count count = new Count();
 		count.count = count.count + 1;
 		model.addAttribute("count", count);
 		MyString myString = new MyString();
-		myString.setMyString(getQuestion.nextQuestion().getQuestion());
+		myString.setMyString(getQuestion.nextQuestion(0).getQuestion());
 		model.addAttribute("myString", myString );
 
 		// Compare Boolean values correctly (avoid reference equality)
