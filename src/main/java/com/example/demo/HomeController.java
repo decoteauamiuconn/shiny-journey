@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.GetMapping; 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.model.Greeting;
@@ -58,18 +59,19 @@ public class HomeController {
 
     @PostMapping("/submit-quiz")
     @ResponseBody
-    public Map<String, Object> submitQuiz(@RequestBody Map<String, Boolean> answers) {
+    public Map<String, Object> submitQuiz(@RequestParam Map<String, String> params) {
         AllQuestions allQuestions = new AllQuestions();
         List<QuestionTrueFalse> questions = allQuestions.getAllQuestions();
         
         List<Map<String, Object>> results = new ArrayList<>();
         
         for (int i = 0; i < questions.size(); i++) {
-            Boolean userAnswer = answers.get("answer" + i);
+            String answerStr = params.get("answer" + i);
+            Boolean userAnswer = answerStr != null ? Boolean.parseBoolean(answerStr) : null;
             QuestionTrueFalse question = questions.get(i);
             
             Map<String, Object> result = new HashMap<>();
-            result.put("correct", userAnswer.equals(question.getAnswer()));
+            result.put("correct", userAnswer != null && userAnswer.equals(question.getAnswer()));
             result.put("correctAnswer", question.getAnswer());
             results.add(result);
         }

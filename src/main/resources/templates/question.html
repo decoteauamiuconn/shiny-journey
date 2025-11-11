@@ -14,14 +14,6 @@
             margin-top: 10px;
             padding: 10px;
         }
-        .correct {
-            background-color: #dff0d8;
-            color: #3c763d;
-        }
-        .incorrect {
-            background-color: #f2dede;
-            color: #a94442;
-        }
     </style>
 </head>
 <body>
@@ -39,18 +31,19 @@
         <button type="submit">Submit All Answers</button>
     </form>
 
-    <script>
+   <script>
         document.getElementById('quizForm').onsubmit = function(e) {
             e.preventDefault();
-            // Submit form data via AJAX
             const formData = new FormData(this);
-            fetch('/submit-quiz', {
+            fetch(this.action, { // use form's action so context path is applied
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
             .then(data => {
-                // Show feedback for each question
                 data.results.forEach((result, index) => {
                     const feedback = document.getElementById('feedback' + index);
                     feedback.textContent = result.correct ? 
@@ -58,6 +51,10 @@
                     feedback.className = 'answer-feedback ' + (result.correct ? 'correct' : 'incorrect');
                     feedback.style.display = 'block';
                 });
+            })
+            .catch(err => {
+                console.error('Submit error:', err);
+                alert('There was a problem submitting the quiz. Please try again.');
             });
         };
     </script>
